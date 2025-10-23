@@ -1,0 +1,32 @@
+services:
+  db:
+    image: postgres:16
+    container_name: experiences_db
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: experiences
+    ports:
+      - '5432:5432'
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+
+  api:
+    build:
+      context: .
+      args:
+        DATABASE_URL: ${DATABASE_URL}
+    container_name: experiences_api
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
+      NODE_ENV: development
+      PORT: 3000
+    ports:
+      - '3000:3000'
+    command: sh -c "npx prisma migrate deploy && node dist/main.js"
+
+volumes:
+  dbdata:
