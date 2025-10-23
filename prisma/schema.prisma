@@ -1,5 +1,6 @@
 generator client {
   provider = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
 }
 
 datasource db {
@@ -16,7 +17,7 @@ model Experience {
   availableSlots Int
   createdAt      DateTime    @default(now())
   updatedAt      DateTime    @updatedAt
-  deletedAt      DateTime?   
+  deletedAt      DateTime?
 
   bookings       Booking[]
 }
@@ -27,7 +28,7 @@ model Booking {
   userEmail    String
   experienceId String
   createdAt    DateTime    @default(now())
-  deletedAt    DateTime?   
+  deletedAt    DateTime?
 
   experience   Experience  @relation(fields: [experienceId], references: [id], onDelete: Cascade)
 }
