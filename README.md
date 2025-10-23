@@ -1,98 +1,181 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Experiences API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+This project is a RESTful API built with **NestJS**, **Prisma**, **PostgreSQL**, and **Docker**.  
+It was developed as a technical challenge and includes complete CRUD operations, soft delete and restore logic, relational booking transactions, seeding, automated tests, and full API documentation using Swagger.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+---
 
-## Description
+## Overview
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+The **Experiences API** allows users to manage experiences (like tours, trips, and activities) and related bookings.  
+It demonstrates clean architecture, separation of concerns, transaction safety, and testable code using NestJS best practices.
 
-## Project setup
+---
+
+## Main Technologies
+
+- **NestJS** – Progressive Node.js framework for building efficient and scalable server-side applications
+- **Prisma ORM** – Modern TypeScript ORM with schema-based migrations
+- **PostgreSQL** – Relational database engine
+- **Docker** – Containerized development and deployment
+- **Jest & Supertest** – Unit and end-to-end testing
+- **Swagger** – Auto-generated API documentation
+
+---
+
+## Project Structure
 
 ```bash
-$ pnpm install
-```
+.
+├── src
+│   ├── app.module.ts
+│   ├── app.controller.ts
+│   ├── app.service.ts
+│   ├── database/
+│   │   └── prisma.service.ts
+│   ├── experiences/
+│   │   ├── dto/
+│   │   │   ├── create-experience.dto.ts
+│   │   │   ├── update-experience.dto.ts
+│   │   │   └── pagination-query.dto.ts
+│   │   ├── experiences.controller.ts
+│   │   ├── experiences.service.ts
+│   │   ├── experiences.repository.ts
+│   │   └── experiences.module.ts
+│   ├── bookings/
+│   │   ├── dto/
+│   │   │   └── create-booking.dto.ts
+│   │   ├── bookings.controller.ts
+│   │   ├── bookings.service.ts
+│   │   ├── bookings.repository.ts
+│   │   └── bookings.module.ts
+│   └── common/
+│       ├── filters/
+│       │   └── http-exception.filter.ts
+│       └── interceptors/
+│           └── response.interceptor.ts
+│
+├── prisma/
+│   ├── schema.prisma
+│   └── seed.ts
+│
+├── test/
+│   ├── app.e2e-spec.ts
+│   └── jest-e2e.json
+├── Dockerfile
+├── docker-compose.yml
+├── package.json
+└── README.md
 
-## Compile and run the project
 
-```bash
-# development
-$ pnpm run start
+*Running the Project with Docker*
 
-# watch mode
-$ pnpm run start:dev
+1. Build and start the containers
+docker-compose down -v
+docker-compose build
+docker-compose up -d
 
-# production mode
-$ pnpm run start:prod
-```
+2. Apply database migrations and seeds
+docker-compose exec api npx prisma migrate deploy
+docker-compose exec api npx prisma db seed
 
-## Run tests
+3. Access the application
 
-```bash
-# unit tests
-$ pnpm run test
+API: http://localhost:3000
 
-# e2e tests
-$ pnpm run test:e2e
+Swagger Docs: http://localhost:3000/api
 
-# test coverage
-$ pnpm run test:cov
-```
+Prisma Studio: http://localhost:5555
 
-## Deployment
+*Database Seeding*
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+Seeds are used to populate the database with initial data for testing and demonstration.
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+Run:
 
-```bash
-$ pnpm install -g @nestjs/mau
-$ mau deploy
-```
+docker-compose exec api npx prisma db seed
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
 
-## Resources
+Example seeded data:
 
-Check out a few resources that may come in handy when working with NestJS:
+Wine Tour — Serra Gaúcha
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+Mountain Trail — Itatiaia National Park
 
-## Support
+Hot Air Balloon Ride — Boituva, SP
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+*Core Features*
 
-## Stay in touch
+-Experiences-
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+Create, list, update, and delete experiences
+
+Filtering by location, price range, and search query
+
+Pagination support (limit, offset)
+
+Soft delete and restore using the deletedAt field
+
+Optional inclusion of deleted records (includeDeleted=true)
+
+-Bookings-
+
+Create bookings linked to specific experiences
+
+Ensures transaction safety and decrements available slots
+
+Prevents booking on deleted or sold-out experiences
+
+Soft delete and restore support
+
+*Testing*
+
+Run unit and end-to-end tests
+docker-compose exec api npm run test
+docker-compose exec api npm run test:e2e
+
+
+The main E2E test file is located at:
+/test/app.e2e-spec.ts — it validates the core /experiences routes.
+
+*Package Scripts*
+
+"scripts": {
+  "start:dev": "nest start --watch",
+  "start:prod": "node dist/main.js",
+  "build": "nest build",
+  "test": "jest",
+  "test:e2e": "jest --config ./test/jest-e2e.json",
+  "lint": "eslint . --ext .ts",
+  "seed": "npx prisma db seed"
+}
+
+*API Endpoints*
+
+Method	Route	Description
+GET	/experiences	List all experiences with filters and pagination
+GET	/experiences/:id	Get details for a specific experience
+POST	/experiences	Create a new experience
+PATCH	/experiences/:id	Update an experience
+DELETE	/experiences/:id	Soft delete an experience
+PATCH	/experiences/:id/restore	Restore a soft-deleted experience
+POST	/bookings	Create a new booking
+GET	/bookings/by-experience/:experienceId	List bookings by experience
+DELETE	/bookings/:id	Soft delete a booking
+PATCH	/bookings/:id/restore	Restore a soft-deleted booking
+
+*API Documentation (Swagger)*
+
+Swagger UI is automatically available once the API is running.
+
+Access it at:
+
+http://localhost:3000/api
+
+
+You can test endpoints directly and explore DTO definitions interactively.
 
 ## License
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+This project was developed for a technical evaluation and is open for educational and demonstration purposes.
+```
