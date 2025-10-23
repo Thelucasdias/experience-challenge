@@ -5,8 +5,10 @@ import {
   Get,
   Param,
   Post,
-  Put,
+  Patch,
   Query,
+  DefaultValuePipe,
+  ParseBoolPipe,
 } from '@nestjs/common';
 import { ExperiencesService } from './experiences.service';
 import { CreateExperienceDto } from './dto/create-experience.dto';
@@ -23,8 +25,12 @@ export class ExperiencesController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.service.findOne(id);
+  findOne(
+    @Param('id') id: string,
+    @Query('includeDeleted', new DefaultValuePipe(false), ParseBoolPipe)
+    includeDeleted: boolean,
+  ) {
+    return this.service.findOne(id, { includeDeleted });
   }
 
   @Post()
@@ -32,13 +38,18 @@ export class ExperiencesController {
     return this.service.create(dto);
   }
 
-  @Put(':id')
+  @Patch(':id')
   update(@Param('id') id: string, @Body() dto: UpdateExperienceDto) {
     return this.service.update(id, dto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.service.remove(id);
+  softDelete(@Param('id') id: string) {
+    return this.service.softDelete(id);
+  }
+
+  @Patch(':id/restore')
+  restore(@Param('id') id: string) {
+    return this.service.restore(id);
   }
 }

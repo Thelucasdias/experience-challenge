@@ -1,4 +1,11 @@
-import { IsInt, IsOptional, IsPositive, IsString, Min } from 'class-validator';
+import {
+  IsInt,
+  IsOptional,
+  IsPositive,
+  IsString,
+  IsBoolean,
+  Min,
+} from 'class-validator';
 import { Type } from 'class-transformer';
 
 export class PaginationQueryDto {
@@ -16,15 +23,30 @@ export class PaginationQueryDto {
 
   @IsOptional()
   @IsString()
+  q?: string;
+
+  @IsOptional()
+  @IsString()
   location?: string;
 
   @IsOptional()
   @Type(() => Number)
-  @IsPositive()
   priceMin?: number;
 
   @IsOptional()
   @Type(() => Number)
-  @IsPositive()
   priceMax?: number;
+
+  @IsOptional()
+  @IsString()
+  orderBy?: 'createdAt' | 'name' | 'price';
+
+  @IsOptional()
+  @IsString()
+  orderDir?: 'asc' | 'desc';
+
+  @IsOptional()
+  @Type(() => Boolean)
+  @IsBoolean()
+  includeDeleted?: boolean = false;
 }
