@@ -59,6 +59,14 @@ export class BookingsService {
     return booking;
   }
 
+  async listAll(opts?: { includeDeleted?: boolean }) {
+    return this.prisma.booking.findMany({
+      where: opts?.includeDeleted ? {} : { deletedAt: null },
+      include: { experience: true },
+      orderBy: { createdAt: 'desc' },
+    });
+  }
+
   async listByExperience(
     experienceId: string,
     opts?: { includeDeleted?: boolean },

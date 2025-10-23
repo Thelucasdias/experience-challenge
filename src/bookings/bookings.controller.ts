@@ -6,8 +6,9 @@ import {
   Post,
   Delete,
   Patch,
+  Query,
 } from '@nestjs/common';
-import { ApiTags, ApiParam } from '@nestjs/swagger';
+import { ApiTags, ApiParam, ApiQuery } from '@nestjs/swagger';
 import { BookingsService } from './bookings.service';
 import { CreateBookingDto } from './dto/create-booking.dto';
 
@@ -15,6 +16,18 @@ import { CreateBookingDto } from './dto/create-booking.dto';
 @Controller('bookings')
 export class BookingsController {
   constructor(private readonly service: BookingsService) {}
+
+  @Get()
+  @ApiQuery({
+    name: 'includeDeleted',
+    required: false,
+    type: Boolean,
+    description: 'Incluir reservas soft-deletadas (true/false)',
+  })
+  listAll(@Query('includeDeleted') includeDeleted?: string) {
+    const include = includeDeleted === 'true';
+    return this.service.listAll({ includeDeleted: include });
+  }
 
   @Post()
   create(@Body() dto: CreateBookingDto) {
