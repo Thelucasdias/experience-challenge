@@ -19,12 +19,9 @@ export class BookingsService {
       where: { id: dto.experienceId },
     });
 
-    if (!exp) throw new NotFoundException('Experience not found');
-    if (exp.deletedAt) {
-      throw new UnprocessableEntityException(
-        'Cannot create booking for a deleted experience',
-      );
-    }
+    if (!exp || exp.deletedAt)
+      throw new NotFoundException('Experience not found');
+
     if (exp.availableSlots <= 0) {
       throw new UnprocessableEntityException('No available slots');
     }
@@ -34,10 +31,6 @@ export class BookingsService {
         where: { id: dto.experienceId, deletedAt: null },
         data: { availableSlots: { decrement: 1 } },
       });
-
-      if (updated.availableSlots < 0) {
-        throw new UnprocessableEntityException('No available slots');
-      }
 
       const booking = await tx.booking.create({
         data: {
@@ -74,11 +67,9 @@ export class BookingsService {
     const exp = await this.prisma.experience.findUnique({
       where: { id: experienceId },
     });
-    if (!exp) throw new NotFoundException('Experience not found');
-    if (!opts?.includeDeleted && exp.deletedAt) {
+    if (!exp || (!opts?.includeDeleted && exp.deletedAt)) {
       throw new NotFoundException('Experience not found');
     }
-
     return this.repo.listByExperience(experienceId);
   }
 
