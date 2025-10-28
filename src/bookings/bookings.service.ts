@@ -3,16 +3,12 @@ import {
   NotFoundException,
   UnprocessableEntityException,
 } from '@nestjs/common';
-import { BookingsRepository } from './bookings.repository';
 import { PrismaService } from '../database/prisma.service';
 import { CreateBookingDto } from './dto/create-booking.dto';
 
 @Injectable()
 export class BookingsService {
-  constructor(
-    private readonly repo: BookingsRepository,
-    private readonly prisma: PrismaService,
-  ) {}
+  constructor(private readonly prisma: PrismaService) {}
 
   async create(dto: CreateBookingDto) {
     const exp = await this.prisma.experience.findUnique({
@@ -27,7 +23,7 @@ export class BookingsService {
     }
 
     const result = await this.prisma.$transaction(async (tx) => {
-      const updated = await tx.experience.update({
+      await tx.experience.update({
         where: { id: dto.experienceId, deletedAt: null },
         data: { availableSlots: { decrement: 1 } },
       });
@@ -47,7 +43,11 @@ export class BookingsService {
   }
 
   async findOne(id: string) {
-    const booking = await this.repo.findById(id);
+    const booking = await this.prisma.booking.findFirst({
+      where: { id, deletedAt: null },
+      include: { experience: true },
+    });
+
     if (!booking) throw new NotFoundException('Booking not found');
     return booking;
   }
@@ -67,21 +67,41 @@ export class BookingsService {
     const exp = await this.prisma.experience.findUnique({
       where: { id: experienceId },
     });
+
     if (!exp || (!opts?.includeDeleted && exp.deletedAt)) {
       throw new NotFoundException('Experience not found');
     }
-    return this.repo.listByExperience(experienceId);
+
+    return this.prisma.booking.findMany({
+      where: { experienceId, deletedAt: null },
+      include: { experience: true },
+      orderBy: { createdAt: 'desc' },
+    });
   }
 
   async softDelete(id: string) {
-    const booking = await this.repo.findById(id);
+    const booking = await this.prisma.booking.findFirst({
+      where: { id, deletedAt: null },
+    });
+
     if (!booking) throw new NotFoundException('Booking not found');
-    return this.repo.softDelete(id);
+
+    return this.prisma.booking.update({
+      where: { id },
+      data: { deletedAt: new Date() },
+    });
   }
 
   async restore(id: string) {
-    const booking = await this.repo.findById(id);
+    const booking = await this.prisma.booking.findFirst({
+      where: { id },
+    });
+
     if (!booking) throw new NotFoundException('Booking not found');
-    return this.repo.restore(id);
+
+    return this.prisma.booking.update({
+      where: { id },
+      data: { deletedAt: null },
+    });
   }
 }
