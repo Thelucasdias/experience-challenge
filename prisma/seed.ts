@@ -15,14 +15,18 @@ async function main() {
           name: 'Wine Tour',
           description: 'Degustação em vinícolas da Serra Gaúcha',
           price: 200.0,
-          location: 'Serra Gaúcha',
+          location: 'Serra Gaúcha - RS',
+          latitude: -29.3639,
+          longitude: -51.317,
           availableSlots: 5,
         },
         {
           name: 'Trilha na Montanha',
           description: 'Trilha ecológica com guia especializado',
           price: 150.0,
-          location: 'Parque Nacional do Itatiaia',
+          location: 'Parque Nacional do Itatiaia - RJ',
+          latitude: -22.4578,
+          longitude: -44.6214,
           availableSlots: 10,
         },
         {
@@ -30,6 +34,8 @@ async function main() {
           description: 'Sobrevoo panorâmico com café da manhã incluso',
           price: 500.0,
           location: 'Boituva - SP',
+          latitude: -23.2858,
+          longitude: -47.6784,
           availableSlots: 3,
         },
         {
@@ -37,6 +43,8 @@ async function main() {
           description: 'Exploração subaquática com instrutor certificado',
           price: 350.0,
           location: 'Arraial do Cabo - RJ',
+          latitude: -22.9661,
+          longitude: -42.0277,
           availableSlots: 8,
         },
         {
@@ -45,6 +53,8 @@ async function main() {
             'Passeio guiado pelos principais pontos turísticos e museus',
           price: 120.0,
           location: 'Ouro Preto - MG',
+          latitude: -20.3856,
+          longitude: -43.5036,
           availableSlots: 15,
         },
         {
@@ -52,6 +62,8 @@ async function main() {
           description: 'Vivência em comunidade ribeirinha e trilhas na selva',
           price: 900.0,
           location: 'Manaus - AM',
+          latitude: -3.119,
+          longitude: -60.0217,
           availableSlots: 6,
         },
         {
@@ -59,6 +71,8 @@ async function main() {
           description: 'Experiência gastronômica completa com pratos típicos',
           price: 180.0,
           location: 'Gramado - RS',
+          latitude: -29.373,
+          longitude: -50.8764,
           availableSlots: 12,
         },
         {
@@ -66,6 +80,8 @@ async function main() {
           description: 'Aprenda a surfar com instrutores certificados',
           price: 220.0,
           location: 'Florianópolis - SC',
+          latitude: -27.5954,
+          longitude: -48.548,
           availableSlots: 10,
         },
         {
@@ -73,6 +89,8 @@ async function main() {
           description: 'Experiência aérea com vista panorâmica da serra',
           price: 400.0,
           location: 'Governador Valadares - MG',
+          latitude: -18.8511,
+          longitude: -41.9493,
           availableSlots: 4,
         },
         {
@@ -80,6 +98,8 @@ async function main() {
           description: 'Tour marítimo com paradas para banho e snorkeling',
           price: 250.0,
           location: 'Angra dos Reis - RJ',
+          latitude: -23.0067,
+          longitude: -44.3181,
           availableSlots: 9,
         },
         {
@@ -87,6 +107,8 @@ async function main() {
           description: 'Curso intensivo em paisagens e luz natural',
           price: 300.0,
           location: 'Chapada Diamantina - BA',
+          latitude: -12.8022,
+          longitude: -41.3228,
           availableSlots: 7,
         },
       ],

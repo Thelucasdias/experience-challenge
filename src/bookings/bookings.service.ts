@@ -5,10 +5,14 @@ import {
 } from '@nestjs/common';
 import { PrismaService } from '../database/prisma.service';
 import { CreateBookingDto } from './dto/create-booking.dto';
+import { WeatherService } from '../weather/weather.service';
 
 @Injectable()
 export class BookingsService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly weather: WeatherService,
+  ) {}
 
   async create(dto: CreateBookingDto) {
     const exp = await this.prisma.experience.findUnique({
@@ -20,6 +24,18 @@ export class BookingsService {
 
     if (exp.availableSlots <= 0) {
       throw new UnprocessableEntityException('No available slots');
+    }
+
+    let weatherData = null;
+    if (exp.latitude && exp.longitude) {
+      try {
+        weatherData = await this.weather.getWeatherByCoordinates(
+          exp.latitude,
+          exp.longitude,
+        );
+      } catch (err) {
+        console.warn('Weather API failed, continuing without it');
+      }
     }
 
     const result = await this.prisma.$transaction(async (tx) => {
