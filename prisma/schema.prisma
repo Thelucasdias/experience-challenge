@@ -27,6 +27,7 @@ model Booking {
   userName     String
   userEmail    String
   experienceId String
+  weather       Json? 
   createdAt    DateTime    @default(now())
   deletedAt    DateTime?
 
