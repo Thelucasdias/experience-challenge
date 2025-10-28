@@ -26,7 +26,7 @@ export class BookingsService {
       throw new UnprocessableEntityException('No available slots');
     }
 
-    let weatherData = null;
+    let weatherData: any = null;
     if (exp.latitude && exp.longitude) {
       try {
         weatherData = await this.weather.getWeatherByCoordinates(
@@ -49,6 +49,7 @@ export class BookingsService {
           userName: dto.userName,
           userEmail: dto.userEmail,
           experienceId: dto.experienceId,
+          weather: weatherData,
         },
       });
 
